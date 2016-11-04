@@ -1,1 +1,9 @@
-
+# ignore everything that isn't output 
+elm-stuff
+build
+.provenance.txt
+src/
+elm-package.json
+target/
+resources/
+release
