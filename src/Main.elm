@@ -10,7 +10,7 @@ import Mouse
 main : Program Never
 main =
     Html.App.program
-        {  init = init
+        { init = init
         , subscriptions = subscriptions
         , update = update
         , view = view
@@ -22,15 +22,17 @@ main =
 
 
 type alias Model =
-    { diagramUrl : String, message : String, nextDiagram : String , lastClick : Mouse.Position }
+    { diagramUrl : String, message : String, nextDiagram : String, lastClick : Mouse.Position , nextLabel : String }
 
 
 init : ( Model, Cmd Msg )
 init =
     { diagramUrl = "elmview.png"
     , message = "Hello World"
-    , nextDiagram = "" , lastClick = { x = 40, y = 50 }
-    } ! []
+    , nextDiagram = ""
+    , lastClick = { x = 40, y = 50 } , nextLabel = ""
+    }
+        ! []
 
 
 
@@ -42,6 +44,7 @@ type Msg
     | NewDiagram
     | NextDiagram String
     | Click Mouse.Position
+    | NextLabel String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -51,7 +54,8 @@ update msg model =
             { model
                 | message = "New Diagram Time"
                 , diagramUrl = model.nextDiagram
-            } ! []
+            }
+                ! []
 
         Noop ->
             model ! []
@@ -61,6 +65,9 @@ update msg model =
 
         Click lastClick ->
             { model | lastClick = lastClick } ! []
+
+        NextLabel string ->
+            { model | nextLabel = string } ! []
 
 
 
@@ -75,6 +82,7 @@ view model =
                 [ style [ ( "backgroundImage", "url(" ++ model.diagramUrl ++ ")" ) ]
                 ]
                 []
+            , lastClickPoint model
             ]
         , Html.aside []
             [ Html.text model.message
@@ -82,6 +90,23 @@ view model =
             , nextDiagramInput model
             , Html.button [ Html.Events.onClick NewDiagram ] [ Html.text "New Diagram" ]
             ]
+        ]
+
+
+lastClickPoint model =
+    Html.div
+        [ style
+            [ ( "position", "absolute" )
+            , ( "left", (toString model.lastClick.x) ++ "px" )
+            , ( "top", (toString model.lastClick.y) ++ "px" )
+            ]
+        ]
+        [ Html.img
+            [ Html.Attributes.id "lastClickPoint"
+            , Html.Attributes.src "x.png"
+            ]
+            []
+        , Html.label [] [ Html.text (toString model.lastClick) ]
         ]
 
 
@@ -96,9 +121,18 @@ nextDiagramInput model =
 
 
 
-
 -- SUBSCRIPTIONS
 
 
 subscriptions model =
     Mouse.clicks Click
+
+
+nextLabelInput : Model -> Html Msg
+nextLabelInput model =
+    Html.input
+        [ Html.Attributes.id "nextLabel"
+        , Html.Events.onInput NextLabel
+        , Html.Attributes.value model.nextLabel
+        ]
+        []
