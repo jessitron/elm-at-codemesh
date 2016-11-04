@@ -29,3 +29,19 @@ sha: n/a
 
 # parameter values
 
+####
+
+# editor info
+name: jessitron.elm-template.AddImport
+group: jessitron
+artifact: elm-template
+version: 1.0.0
+
+# backing git repo
+repo: git@github.com-personal:jessitron/elm-template.git
+branch: master
+sha: d1bef91
+
+# parameter values
+lizard: Html.Events
+

@@ -3,6 +3,7 @@ module Main exposing (main)
 import Html exposing (Html)
 import Html.Attributes exposing (style)
 import Html.App
+import Html.Events
 
 
 main : Program Never
@@ -35,11 +36,15 @@ model =
 
 type Msg
     = Noop
+    | NewDiagram
 
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
+        NewDiagram ->
+            { model | message = "New Diagram Time" }
+
         Noop ->
             model
 
@@ -57,5 +62,9 @@ view model =
                 ]
                 []
             ]
-        , Html.aside [] [ Html.text model.message ]
+        , Html.aside []
+            [ Html.text model.message
+            , Html.hr [] []
+            , Html.button [ Html.Events.onClick NewDiagram ] [ Html.text "New Diagram" ]
+            ]
         ]
