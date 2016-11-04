@@ -45,3 +45,49 @@ sha: d1bef91
 # parameter values
 lizard: Html.Events
 
+####
+
+# editor info
+name: jessitron.elm-template.AddTextInput
+group: jessitron
+artifact: elm-template
+version: 1.0.0
+
+# backing git repo
+repo: n/a
+branch: n/a
+sha: n/a
+
+# parameter values
+input_name: nextDiagram
+
+####
+
+# editor info
+name: jessitron.elm-template.UpgradeToProgram
+group: jessitron
+artifact: elm-template
+version: 1.0.0
+
+# backing git repo
+repo: n/a
+branch: n/a
+sha: n/a
+
+# parameter values
+
+####
+
+# editor info
+name: jessitron.elm-template.SubscribeToClicks
+group: jessitron
+artifact: elm-template
+version: 1.0.0
+
+# backing git repo
+repo: n/a
+branch: n/a
+sha: n/a
+
+# parameter values
+

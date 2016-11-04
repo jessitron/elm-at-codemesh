@@ -4,12 +4,14 @@ import Html exposing (Html)
 import Html.Attributes exposing (style)
 import Html.App
 import Html.Events
+import Mouse
 
 
 main : Program Never
 main =
-    Html.App.beginnerProgram
-        { model = model
+    Html.App.program
+        {  init = init
+        , subscriptions = subscriptions
         , update = update
         , view = view
         }
@@ -20,14 +22,15 @@ main =
 
 
 type alias Model =
-    { diagramUrl : String, message : String }
+    { diagramUrl : String, message : String, nextDiagram : String , lastClick : Mouse.Position }
 
 
-model : Model
-model =
+init : ( Model, Cmd Msg )
+init =
     { diagramUrl = "elmview.png"
     , message = "Hello World"
-    }
+    , nextDiagram = "" , lastClick = { x = 40, y = 50 }
+    } ! []
 
 
 
@@ -37,16 +40,27 @@ model =
 type Msg
     = Noop
     | NewDiagram
+    | NextDiagram String
+    | Click Mouse.Position
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         NewDiagram ->
-            { model | message = "New Diagram Time" }
+            { model
+                | message = "New Diagram Time"
+                , diagramUrl = model.nextDiagram
+            } ! []
 
         Noop ->
-            model
+            model ! []
+
+        NextDiagram string ->
+            { model | nextDiagram = string } ! []
+
+        Click lastClick ->
+            { model | lastClick = lastClick } ! []
 
 
 
@@ -65,6 +79,26 @@ view model =
         , Html.aside []
             [ Html.text model.message
             , Html.hr [] []
+            , nextDiagramInput model
             , Html.button [ Html.Events.onClick NewDiagram ] [ Html.text "New Diagram" ]
             ]
         ]
+
+
+nextDiagramInput : Model -> Html Msg
+nextDiagramInput model =
+    Html.input
+        [ Html.Attributes.id "nextDiagram"
+        , Html.Events.onInput NextDiagram
+        , Html.Attributes.value model.nextDiagram
+        ]
+        []
+
+
+
+
+-- SUBSCRIPTIONS
+
+
+subscriptions model =
+    Mouse.clicks Click
