@@ -14,3 +14,18 @@ sha: n/a
 # parameter values
 project_name: CodeMesh
 
+####
+
+# editor info
+name: jessitron.elm-template.UpgradeToBeginnerProgram
+group: jessitron
+artifact: elm-template
+version: 1.0.0
+
+# backing git repo
+repo: n/a
+branch: n/a
+sha: n/a
+
+# parameter values
+
