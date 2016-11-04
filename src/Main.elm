@@ -5,6 +5,8 @@ import Html.Attributes exposing (style)
 import Html.App
 import Html.Events
 import Mouse
+import Dom
+import Task
 
 
 main : Program Never
@@ -22,7 +24,7 @@ main =
 
 
 type alias Model =
-    { diagramUrl : String, message : String, nextDiagram : String, lastClick : Mouse.Position , nextLabel : String }
+    { diagramUrl : String, message : String, nextDiagram : String, lastClick : Mouse.Position, nextLabel : String }
 
 
 init : ( Model, Cmd Msg )
@@ -30,7 +32,8 @@ init =
     { diagramUrl = "elmview.png"
     , message = "Hello World"
     , nextDiagram = ""
-    , lastClick = { x = 40, y = 50 } , nextLabel = ""
+    , lastClick = { x = 40, y = 50 }
+    , nextLabel = ""
     }
         ! []
 
@@ -45,6 +48,8 @@ type Msg
     | NextDiagram String
     | Click Mouse.Position
     | NextLabel String
+    | DomError Dom.Error
+    | FocusSuccess ()
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -64,10 +69,16 @@ update msg model =
             { model | nextDiagram = string } ! []
 
         Click lastClick ->
-            { model | lastClick = lastClick } ! []
+            { model | lastClick = lastClick } ! [ requestFocus "nextLabelInput" ]
 
         NextLabel string ->
             { model | nextLabel = string } ! []
+
+        DomError (Dom.NotFound notFound) ->
+            model ! []
+
+        FocusSuccess _ ->
+            model ! []
 
 
 
@@ -106,7 +117,7 @@ lastClickPoint model =
             , Html.Attributes.src "x.png"
             ]
             []
-        , Html.label [] [ Html.text (toString model.lastClick) ]
+        , nextLabelInput model
         ]
 
 
@@ -136,3 +147,7 @@ nextLabelInput model =
         , Html.Attributes.value model.nextLabel
         ]
         []
+
+
+requestFocus field_id =
+    Task.perform DomError FocusSuccess (Dom.focus field_id)
