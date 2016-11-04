@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# do once:
+#   git checkout --orphan gh-pages
+#  
+set -e
+set -x
+
+function set_up_gitignore() {
+	# later: ignore every current file
+    echo "# ignore everything that isn't output " > .gitignore
+	echo "elm-stuff" >> .gitignore
+	echo "build" >> .gitignore
+	echo ".provenance.txt" >> .gitignore
+	echo "src/" >> .gitignore
+	echo "elm-package.json" >> .gitignore
+	echo "target/" >> .gitignore
+	echo "resources/" >> .gitignore
+	echo "release" >> .gitignore
+}
+
+git checkout gh-pages
+set_up_gitignore
+cp target/index.html target/elm.js .
+cp resources/* .
+git add *.css *.png *.html *.js .gitignore
+git commit -m "Release"
+git push gh-pages
+git checkout -
+
