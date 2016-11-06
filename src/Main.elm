@@ -136,13 +136,16 @@ view model =
         ]
 
 
+beAt { x, y } =
+    [ ( "position", "absolute" )
+    , ( "left", (toString x) ++ "px" )
+    , ( "top", (toString y) ++ "px" )
+    ]
+
+
 lastClickPoint model =
     Html.div
-        [ style
-            [ ( "position", "absolute" )
-            , ( "left", (toString model.lastClick.x) ++ "px" )
-            , ( "top", (toString model.lastClick.y) ++ "px" )
-            ]
+        [ style (beAt model.lastClick)
         ]
         [ Html.img
             [ Html.Attributes.id "lastClickPoint"
