@@ -149,6 +149,7 @@ nextLabelInput model =
     Html.input
         [ Html.Attributes.id "nextLabel"
         , Html.Events.onInput NextLabel
+        , onEnter SaveLabel
         , Html.Attributes.value model.nextLabel
         ]
         []
