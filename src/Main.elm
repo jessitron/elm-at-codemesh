@@ -75,7 +75,7 @@ update msg model =
             { model | nextLabel = string } ! []
 
         DomError (Dom.NotFound notFound) ->
-            model ! []
+            { model | message = "Error! Field not found: " ++ notFound } ! []
 
         FocusSuccess _ ->
             model ! []
