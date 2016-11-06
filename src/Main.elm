@@ -40,7 +40,7 @@ type alias Model =
 
 init : ( Model, Cmd Msg )
 init =
-    { diagramUrl = "elmview.png"
+    { diagramUrl = "elmprogram.png"
     , message = "Hello World"
     , nextDiagram = ""
     , lastClick = Nothing
