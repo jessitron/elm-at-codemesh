@@ -69,7 +69,7 @@ update msg model =
             { model | nextDiagram = string } ! []
 
         Click lastClick ->
-            { model | lastClick = lastClick } ! [ requestFocus "nextLabelInput" ]
+            { model | lastClick = lastClick } ! [ requestFocus "nextLabel" ]
 
         NextLabel string ->
             { model | nextLabel = string } ! []
