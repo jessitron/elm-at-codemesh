@@ -160,7 +160,7 @@ labelsView model =
     let
         labelElement label =
             Html.label
-                []
+                [ style (beAt label.pos) ]
                 [ Html.text label.text ]
     in
         Html.div []
