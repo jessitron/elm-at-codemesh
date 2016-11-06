@@ -25,17 +25,22 @@ main =
 -- MODEL
 
 
+type alias RelativePosition =
+    { x : Float, y : Float }
+
+
 type alias Label =
-    { pos : Mouse.Position, text : String }
+    { pos : RelativePosition, text : String }
 
 
 type alias Model =
     { diagramUrl : String
     , message : String
     , nextDiagram : String
-    , lastClick : Maybe Mouse.Position
+    , lastClick : Maybe RelativePosition
     , nextLabel : String
-    , labels : List Label , windowSize : Window.Size
+    , labels : List Label
+    , windowSize : Window.Size
     }
 
 
@@ -46,7 +51,8 @@ init =
     , nextDiagram = ""
     , lastClick = Nothing
     , nextLabel = ""
-    , labels = [] , windowSize = { width = 1, height = 1 }
+    , labels = []
+    , windowSize = { width = 1, height = 1 }
     }
         ! [ Task.perform SomeError WindowSize Window.size ]
 
@@ -93,7 +99,13 @@ update msg model =
             { model | nextDiagram = string } ! []
 
         Click lastClick ->
-            { model | lastClick = Just lastClick } ! [ requestFocus "nextLabel" ]
+            let
+                relativeClick =
+                    { x = (toFloat lastClick.x) * 100 / (toFloat model.windowSize.width)
+                    , y = (toFloat lastClick.y) * 100 / (toFloat model.windowSize.height)
+                    }
+            in
+                { model | lastClick = Just relativeClick } ! [ requestFocus "nextLabel" ]
 
         NextLabel string ->
             { model | nextLabel = string } ! []
@@ -157,8 +169,8 @@ view model =
 
 beAt { x, y } =
     [ ( "position", "absolute" )
-    , ( "left", (toString x) ++ "px" )
-    , ( "top", (toString y) ++ "px" )
+    , ( "left", (toString x) ++ "vw" )
+    , ( "top", (toString y) ++ "vh" )
     ]
 
 
