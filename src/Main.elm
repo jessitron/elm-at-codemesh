@@ -104,7 +104,7 @@ update msg model =
         SaveLabel ->
             case model.lastClick of
                 Nothing ->
-                    model ! []
+                    { model | message = "That was not expected!" } ! []
 
                 Just lastClick ->
                     { model
@@ -113,6 +113,8 @@ update msg model =
                             , text = model.nextLabel
                             }
                                 :: model.labels
+                        , nextLabel = ""
+                        , lastClick = Nothing
                     }
                         ! []
 
