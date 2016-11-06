@@ -32,7 +32,7 @@ type alias Model =
     { diagramUrl : String
     , message : String
     , nextDiagram : String
-    , lastClick : Mouse.Position
+    , lastClick : Maybe Mouse.Position
     , nextLabel : String
     , labels : List Label
     }
@@ -43,7 +43,7 @@ init =
     { diagramUrl = "elmview.png"
     , message = "Hello World"
     , nextDiagram = ""
-    , lastClick = { x = 40, y = 50 }
+    , lastClick = Nothing
     , nextLabel = ""
     , labels = []
     }
@@ -90,7 +90,7 @@ update msg model =
             { model | nextDiagram = string } ! []
 
         Click lastClick ->
-            { model | lastClick = lastClick } ! [ requestFocus "nextLabel" ]
+            { model | lastClick = Just lastClick } ! [ requestFocus "nextLabel" ]
 
         NextLabel string ->
             { model | nextLabel = string } ! []
@@ -102,14 +102,19 @@ update msg model =
             model ! []
 
         SaveLabel ->
-            { model
-                | labels =
-                    { pos = model.lastClick
-                    , text = model.nextLabel
+            case model.lastClick of
+                Nothing ->
+                    model ! []
+
+                Just lastClick ->
+                    { model
+                        | labels =
+                            { pos = lastClick
+                            , text = model.nextLabel
+                            }
+                                :: model.labels
                     }
-                        :: model.labels
-            }
-                ! []
+                        ! []
 
 
 
@@ -144,16 +149,21 @@ beAt { x, y } =
 
 
 lastClickPoint model =
-    Html.div
-        [ style (beAt model.lastClick)
-        ]
-        [ Html.img
-            [ Html.Attributes.id "lastClickPoint"
-            , Html.Attributes.src "x.png"
-            ]
-            []
-        , nextLabelInput model
-        ]
+    case model.lastClick of
+        Nothing ->
+            Html.div [] []
+
+        Just lastClick ->
+            Html.div
+                [ style (beAt lastClick)
+                ]
+                [ Html.img
+                    [ Html.Attributes.id "lastClickPoint"
+                    , Html.Attributes.src "x.png"
+                    ]
+                    []
+                , nextLabelInput model
+                ]
 
 
 labelsView model =
