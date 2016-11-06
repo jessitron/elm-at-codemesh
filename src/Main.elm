@@ -40,6 +40,14 @@ init =
 
 
 
+-- SUBSCRIPTIONS
+
+
+subscriptions model =
+    Mouse.clicks Click
+
+
+
 -- UPDATE
 
 
@@ -134,14 +142,6 @@ nextDiagramInput model =
         , Html.Attributes.value model.nextDiagram
         ]
         []
-
-
-
--- SUBSCRIPTIONS
-
-
-subscriptions model =
-    Mouse.clicks Click
 
 
 nextLabelInput : Model -> Html Msg
