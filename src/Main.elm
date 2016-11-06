@@ -7,6 +7,7 @@ import Html.Events
 import Mouse
 import Dom
 import Task
+import Json.Decode
 
 
 main : Program Never
@@ -50,6 +51,7 @@ type Msg
     | NextLabel String
     | DomError Dom.Error
     | FocusSuccess ()
+    | SaveLabel
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -78,6 +80,9 @@ update msg model =
             { model | message = "Error! Field not found: " ++ notFound } ! []
 
         FocusSuccess _ ->
+            model ! []
+
+        SaveLabel ->
             model ! []
 
 
@@ -151,3 +156,15 @@ nextLabelInput model =
 
 requestFocus field_id =
     Task.perform DomError FocusSuccess (Dom.focus field_id)
+
+
+onEnter : Msg -> Html.Attribute Msg
+onEnter msg =
+    let
+        tagger code =
+            if code == 13 then
+                msg
+            else
+                Noop
+    in
+        Html.Events.on "keydown" (Json.Decode.map tagger Html.Events.keyCode)
