@@ -24,8 +24,18 @@ main =
 -- MODEL
 
 
+type alias Label =
+    { pos : Mouse.Position, text : String }
+
+
 type alias Model =
-    { diagramUrl : String, message : String, nextDiagram : String, lastClick : Mouse.Position, nextLabel : String }
+    { diagramUrl : String
+    , message : String
+    , nextDiagram : String
+    , lastClick : Mouse.Position
+    , nextLabel : String
+    , labels : List Label
+    }
 
 
 init : ( Model, Cmd Msg )
@@ -35,6 +45,7 @@ init =
     , nextDiagram = ""
     , lastClick = { x = 40, y = 50 }
     , nextLabel = ""
+    , labels = []
     }
         ! []
 
@@ -91,7 +102,14 @@ update msg model =
             model ! []
 
         SaveLabel ->
-            model ! []
+            { model
+                | labels =
+                    { pos = model.lastClick
+                    , text = model.nextLabel
+                    }
+                        :: model.labels
+            }
+                ! []
 
 
 
