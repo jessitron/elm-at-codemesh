@@ -102,25 +102,28 @@ update msg model =
             model ! []
 
         SaveLabel ->
-            case model.lastClick of
-                Nothing ->
-                    { model | message = "That was not expected!" } ! []
-
-                Just lastClick ->
-                    { model
-                        | labels =
-                            { pos = lastClick
-                            , text = model.nextLabel
-                            }
-                                :: model.labels
-                        , nextLabel = ""
-                        , lastClick = Nothing
-                    }
-                        ! []
+            (saveLabel model) ! []
 
 
 
 -- VIEW
+
+
+saveLabel model =
+    case model.lastClick of
+        Nothing ->
+            { model | message = "That was not expected!" }
+
+        Just lastClick ->
+            { model
+                | labels =
+                    { pos = lastClick
+                    , text = model.nextLabel
+                    }
+                        :: model.labels
+                , nextLabel = ""
+                , lastClick = Nothing
+            }
 
 
 view : Model -> Html Msg
