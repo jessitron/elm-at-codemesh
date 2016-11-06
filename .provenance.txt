@@ -138,3 +138,18 @@ sha: n/a
 # parameter values
 enter_message: SaveLabel
 
+####
+
+# editor info
+name: jessitron.elm-template.SubscribeToWindowSize
+group: jessitron
+artifact: elm-template
+version: 1.0.0
+
+# backing git repo
+repo: n/a
+branch: n/a
+sha: n/a
+
+# parameter values
+

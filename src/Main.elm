@@ -8,6 +8,7 @@ import Mouse
 import Dom
 import Task
 import Json.Decode
+import Window
 
 
 main : Program Never
@@ -34,7 +35,7 @@ type alias Model =
     , nextDiagram : String
     , lastClick : Maybe Mouse.Position
     , nextLabel : String
-    , labels : List Label
+    , labels : List Label , windowSize : Window.Size
     }
 
 
@@ -45,9 +46,9 @@ init =
     , nextDiagram = ""
     , lastClick = Nothing
     , nextLabel = ""
-    , labels = []
+    , labels = [] , windowSize = { width = 1, height = 1 }
     }
-        ! []
+        ! [ Task.perform SomeError WindowSize Window.size ]
 
 
 
@@ -55,7 +56,7 @@ init =
 
 
 subscriptions model =
-    Mouse.clicks Click
+    Sub.batch [ Window.resizes WindowSize, Mouse.clicks Click ]
 
 
 
@@ -71,6 +72,8 @@ type Msg
     | DomError Dom.Error
     | FocusSuccess ()
     | SaveLabel
+    | WindowSize Window.Size
+    | SomeError String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -103,6 +106,12 @@ update msg model =
 
         SaveLabel ->
             (saveLabel model) ! []
+
+        WindowSize windowSize ->
+            { model | windowSize = windowSize } ! []
+
+        SomeError err ->
+            model ! []
 
 
 
