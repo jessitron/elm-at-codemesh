@@ -125,6 +125,7 @@ view model =
                 ]
                 []
             , lastClickPoint model
+            , labelsView model
             ]
         , Html.aside []
             [ Html.text model.message
@@ -150,6 +151,17 @@ lastClickPoint model =
             []
         , nextLabelInput model
         ]
+
+
+labelsView model =
+    let
+        labelElement label =
+            Html.label
+                []
+                [ Html.text label.text ]
+    in
+        Html.div []
+            (List.map labelElement model.labels)
 
 
 nextDiagramInput : Model -> Html Msg
